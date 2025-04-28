@@ -11,6 +11,8 @@ namespace QFX.SFX
         public bool DestroyAfterCollision;
         public float DestroyAfterCollisionTimeout;
 
+        public Vector3 CreationPosition;
+
         private Transform _transform;
 
         private bool _wasCollided;
@@ -31,6 +33,11 @@ namespace QFX.SFX
             };
 
             _transform = transform;
+        }
+
+        public void Start()
+        {
+            CreationPosition = this.transform.position;
         }
 
         private void Update()

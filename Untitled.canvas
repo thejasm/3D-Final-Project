@@ -1,0 +1,23 @@
+{
+	"nodes":[
+		{"id":"903b1501db6f1135","type":"group","x":960,"y":-240,"width":1200,"height":694,"label":"Turret"},
+		{"id":"4b5c4c8f46fe88f9","type":"group","x":960,"y":560,"width":1200,"height":694,"label":"Grunt"},
+		{"id":"aaef77d5b196585b","type":"group","x":960,"y":1360,"width":1200,"height":694,"label":"Tank"},
+		{"id":"923963ba3fabb530","type":"text","text":"\nStates\n- Idle\n\t- Turret faces random directions\n- Attacking\n\t- When player comes into turret's view in range\n\t- for 5 seconds after last engagement with player\n\t- When player shoots at turret\n\t- Aims at player's last known location and fires\n- Mechanics\n\t- Slow shooting with explosion","x":980,"y":-160,"width":360,"height":594},
+		{"id":"0278125ecd3ec80a","type":"text","text":"# Turret","x":980,"y":-220,"width":250,"height":60},
+		{"id":"d3e13ef38a12eaaa","type":"text","text":"# TurretController\n\n**Variables:**\n\n\n**Methods:**\n","x":1340,"y":1440,"width":800,"height":594},
+		{"id":"90e59205ca4f7ea0","type":"text","text":"States\n- Idle\n\t- Faces random Directions\n- Pursuing\n\t- When player comes within FOV\n\t- Move slowly towards player\n- Shooting\n\t- When player is within view and range\n\t- Stops moving and shoots at player\n- Searching\n\t- Move towards player's last known position\n\t- Go back to idle","x":980,"y":1440,"width":360,"height":594},
+		{"id":"1ca864b089f0d03e","type":"text","text":"# Tank","x":980,"y":1380,"width":250,"height":60},
+		{"id":"9de2cb07612b5197","type":"text","text":"# Base AI Controller\n\n**Variables:**\n\n- playerTarget\n- navMeshAgent agent\n- health\n- visionObstructionLayer\n- float Range\n- float FOV\n- raycast Vision\n- Gun GameObject\n- fireRate\n- IdleLookTime\n\n**Methods:**\n\n- `public bool IsPlayerInRange(PlayerTarget, Range)`\n- `public bool IsPlayerInView(PlayerTarget, visionObstructionLayer, Vision)`\n- `public void ShootAtPlayer(PlayerTarget)`\n- `public virtual void IdleAnim(IdleLookTime)`\n- `public void TakeDamage(float amount)`\n\t- reduce health\n- `public virtual void Die()`","x":-40,"y":580,"width":660,"height":690},
+		{"id":"4086c0c12c82101c","type":"file","file":"Unity/3D-Final-Project/Need to Add.md","x":-520,"y":-208,"width":400,"height":2265},
+		{"id":"24c2da6501fdc7fd","type":"text","text":"States\n- Idle\n\t- Faces random Directions\n- Pursuing\n\t- When player comes within FOV\n\t- Move at max speed towards player\n- Strafing\n\t- When player is within view and range\n\t- randomly strafe around player and shoot","x":980,"y":640,"width":360,"height":594},
+		{"id":"59567bcb29ad403b","type":"text","text":"# GruntController\n\n**Variables:**\n\n\n**Methods:**\n","x":1340,"y":640,"width":800,"height":594},
+		{"id":"637a447cd9372cf2","type":"text","text":"# Grunt","x":980,"y":580,"width":250,"height":60},
+		{"id":"0081d6f662133647","type":"text","text":"# TurretController\n\n**Variables:**\n- turretHead\n- turnSpeed\n- engagementTimeout\n- isEngaged\n- engagementTime\n- PlayerLastKnownPosition { get; set; }\n\n\n**Methods:**\n- `Idle.execute()`\n\t- if `IsPlayerInRange`\n\t\t- if `IsPlayerInView`\n\t\t\t- Change to Active State\n\t- if `TakeDamage`\n\t\t- get Creation Position of last bullet collision, set as PlayerLastKnownPosition\n\t\t- Change to Active State\n- `Active.start()`\n\t- set `isEngaged` to true\n\t- set engagementTime = enagementTimeout\n- `Active.execute()`\n\t- `ShootAtPlayer()\n\t- engagementTime -= Time.deltaTime;\n\t- if engagementTime <= 0f\n\t\t- Change to Idle State","x":1340,"y":-160,"width":800,"height":594}
+	],
+	"edges":[
+		{"id":"ce02afd29f3fa1bd","fromNode":"9de2cb07612b5197","fromSide":"right","toNode":"903b1501db6f1135","toSide":"left"},
+		{"id":"92dfb57a2c2fcbd2","fromNode":"9de2cb07612b5197","fromSide":"right","toNode":"4b5c4c8f46fe88f9","toSide":"left"},
+		{"id":"61f6fbd1fa59b880","fromNode":"9de2cb07612b5197","fromSide":"right","toNode":"aaef77d5b196585b","toSide":"left"}
+	]
+}
