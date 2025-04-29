@@ -54,11 +54,11 @@
 # Abilities
 - [ ] Dash
 	- [ ] Dash Effects
-	- [ ] Dash Mechanics
 - [ ] Shield
+	- [ ] Shader
 - [ ] Gauss Gun
-	- [ ] Physics
-	- [ ] Charge Up Mechanic
+- [ ] Wraithe Shot
+	- [ ] Model
 - [x] Machine Gun
 
 # Misc

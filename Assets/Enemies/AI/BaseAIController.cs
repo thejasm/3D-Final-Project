@@ -1,3 +1,6 @@
+using QFX.SFX;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -7,15 +10,18 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
     [SerializeField] private string currentStateName;
 
-    // TODO: Add variables for AI (Attack range, FOV object, health, etc.)
     public GameObject playerTarget;
     public float health = 100f;
     public LayerMask visionObstructionLayer;
     public float range = 20f;
     public float FOV = 80f;
     public GameObject gun;
-    public float fireRate = 3f;
+    public float fireRate = 1f;
+
     public float IdleLookTime = 3f;
+    protected float nextIdleLookTime = 0f;
+    public float idleRotationSpeed = 90f;
+    protected Quaternion targetIdleRotation;
 
     // TODO: Implement methods for AI
     public bool IsPlayerInRange(){
@@ -25,19 +31,44 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         return false;
     }
     public bool IsPlayerInView(){
-        if (IsPlayerInRange()) {
-            Vector3 dirToTarget = (playerTarget.transform.position - transform.position).normalized;
-            float angle = Vector3.Angle(transform.forward, dirToTarget);
-            if (angle <= FOV / 2) {
+        if (playerTarget == null) return false;
+
+        Vector3 positionToCheckFrom = transform.position;
+        Vector3 directionToPlayer = (playerTarget.transform.position - positionToCheckFrom).normalized;
+        float distanceToPlayer = Vector3.Distance(positionToCheckFrom, playerTarget.transform.position);
+
+        if (Vector3.Angle(transform.forward, directionToPlayer) <= (FOV / 2)) {
+            if (!Physics.Raycast(positionToCheckFrom, directionToPlayer, distanceToPlayer, visionObstructionLayer)) {
+                // If the raycast DOES NOT hit an obstruction, the player is in view.
                 return true;
             }
+            // Raycast hit an obstruction, player is blocked.
         }
+
         return false;
     }
-    public void ShootAtPlayer() { return; }
-    public virtual void IdleAnim(){ return; }
-    public void TakeDamage(float amount){ return; }
-    public virtual void Die(){ return; }
+    public void StartShooting() {
+        gun.GetComponent<SFX_AIControlledObjectLauncher>().StartShooting(fireRate);
+    }
+    public void StopShooting() {
+        gun.GetComponent<SFX_AIControlledObjectLauncher>().StopShooting();
+    }
+
+    public virtual void IdleAnim(){
+        if (Time.time >= nextIdleLookTime) {
+            targetIdleRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+            nextIdleLookTime = Time.time + IdleLookTime;
+        }
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetIdleRotation, idleRotationSpeed * Time.deltaTime);
+    }
+
+    public void TakeDamage(float amount){
+        health -= amount;
+    }
+    public virtual void Die(){
+        return;
+    }
 
     // STATE MACHINE METHODS -------------------------------------------------------------------------------------
     protected virtual void Awake() {
