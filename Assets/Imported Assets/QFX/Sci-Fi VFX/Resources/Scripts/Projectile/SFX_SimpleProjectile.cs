@@ -7,6 +7,7 @@ namespace QFX.SFX
     public class SFX_SimpleProjectile : SFX_ControlledObject, SFX_IEmitterKeeper
     {
         public float Speed = 1;
+        public float damage = 1f;
 
         public bool DestroyAfterCollision;
         public float DestroyAfterCollisionTimeout;

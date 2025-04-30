@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ProBuilder;
 using UnityEngine.UIElements;
 
 public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIController<T> {
@@ -17,11 +18,14 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
     public float FOV = 80f;
     public GameObject gun;
     public float fireRate = 1f;
+    public float turnSpeed = 90f;
 
     public float IdleLookTime = 3f;
-    protected float nextIdleLookTime = 0f;
     public float idleRotationSpeed = 90f;
+
+    protected float nextIdleLookTime = 0f;
     protected Quaternion targetIdleRotation;
+    protected Vector3 playerLastKnownPosition = Vector3.zero;
 
     // TODO: Implement methods for AI
     public bool IsPlayerInRange(){
@@ -47,6 +51,17 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
         return false;
     }
+
+    public void TurnToTarget(Vector3 targetPosition) {
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
+    }
+
+    public void TurnToPlayerLastKnownPosition() {
+        TurnToTarget(playerLastKnownPosition);
+    }
+
     public void StartShooting() {
         gun.GetComponent<SFX_AIControlledObjectLauncher>().StartShooting(fireRate);
     }
@@ -63,12 +78,20 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetIdleRotation, idleRotationSpeed * Time.deltaTime);
     }
 
+    public virtual void BulletHit(GameObject bullet) {
+        SFX_SimpleProjectile projectile = bullet.GetComponent<SFX_SimpleProjectile>();
+        if (health >= 0) health -= projectile.damage;
+        else Die();
+    }
+
     public void TakeDamage(float amount){
         health -= amount;
     }
+
     public virtual void Die(){
         return;
     }
+
 
     // STATE MACHINE METHODS -------------------------------------------------------------------------------------
     protected virtual void Awake() {
@@ -142,5 +165,8 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
                 Gizmos.DrawLine(this.transform.position, playerTarget.transform.position);
             }
         }
+
+        Gizmos.color = new Color(1f, 1f, 1f, 0.3f);
+        Gizmos.DrawSphere(playerLastKnownPosition, 1f);
     }
 }

@@ -14,8 +14,6 @@ GameObject:
   - component: {fileID: 114619121163546550}
   - component: {fileID: 114620022445763740}
   - component: {fileID: 96135733568133142}
-  - component: {fileID: -7384612412826671511}
-  - component: {fileID: 5318475039153830864}
   m_Layer: 0
   m_Name: Blaster_Bullet
   m_TagString: PlayerBullet
@@ -72,6 +70,7 @@ MonoBehaviour:
   RunAtStart: 1
   Delay: 0
   Speed: 250
+  damage: 1
   DestroyAfterCollision: 1
   DestroyAfterCollisionTimeout: 0.5
   CreationPosition: {x: 0, y: 0, z: 0}
@@ -229,36 +228,3 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
---- !u!114 &-7384612412826671511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414231667779800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41e3d973984f9714ba6f00aa801785c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!65 &5318475039153830864
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414231667779800}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.34139457, y: 0.34139457, z: 0.34139457}
-  m_Center: {x: 0, y: 0, z: 0}

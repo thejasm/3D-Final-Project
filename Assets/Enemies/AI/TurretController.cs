@@ -1,15 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using QFX.SFX;
 
 public class TurretController: BaseAIController<TurretController> {
     // TODO: Add variables for turret
-    public float turnSpeed = 90f;
     public float engagementTimeout = 5f;
     [HideInInspector]
     public float engagementTime = 0f;
-    [HideInInspector]
-    public Vector3 playerLastKnownPosition = Vector3.zero;
 
 
     public TurretIdleState IdleState { get; private set; }
@@ -30,47 +28,16 @@ public class TurretController: BaseAIController<TurretController> {
 
     // Update method is handled by BaseAIController
 
-    //TODO: Add turret logic Functions
-    public void TurnToTarget(Vector3 targetPosition) {
-        Vector3 direction = (targetPosition - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
+    public override void BulletHit(GameObject bullet) {
+        SFX_SimpleProjectile projectile = bullet.GetComponent<SFX_SimpleProjectile>();
+        playerLastKnownPosition = projectile.CreationPosition;
+        ChangeState(AttackState);
+        if (health >= 0) health -= projectile.damage;
+        else Die();
     }
 
-    public void TurnToPlayerLastKnownPosition() {
-        TurnToTarget(playerLastKnownPosition);
-    }
 
-    // DEBUG GIZMOS ---------------------------------------------------------------------------------------------
-    private void OnDrawGizmos() {
-        Gizmos.color = new Color(1, 1, 0, 0.1f);
-        Gizmos.DrawSphere(transform.position, range);
-        Gizmos.color = new Color(1, 1, 0, 1f);
-        Gizmos.DrawWireSphere(transform.position, range);
-
-
-        if (playerTarget != null) {
-            if (IsPlayerInView()) {
-                Gizmos.color = Color.blue;
-                Gizmos.DrawLine(this.transform.position, playerTarget.transform.position);
-            }
-            else if (IsPlayerInRange()) {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(this.transform.position, playerTarget.transform.position);
-            }
-            else {
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(this.transform.position, playerTarget.transform.position);
-            }
-        }
-
-        Gizmos.color = new Color(1f, 1f, 1f, 0.3f);
-        Gizmos.DrawSphere(playerLastKnownPosition, 1f);
-    }
-}
-
-
-public class TurretIdleState: BaseState<TurretController> {
+    public class TurretIdleState: BaseState<TurretController> {
 
     public TurretIdleState(TurretController controller) : base(controller) { }
 
@@ -89,30 +56,32 @@ public class TurretIdleState: BaseState<TurretController> {
     public override void Exit() { }
 }
 
-public class TurretAttackingState: BaseState<TurretController> {
+    public class TurretAttackingState: BaseState<TurretController> {
 
-    public TurretAttackingState(TurretController controller) : base(controller) { }
+        public TurretAttackingState(TurretController controller) : base(controller) { }
 
-    public override void Enter() {
-        controller.StartShooting();
-    }
+        public override void Enter() {
+            controller.StartShooting();
+        }
 
-    public override void Execute() {
-        if (controller.IsPlayerInView()) {
-            controller.playerLastKnownPosition = controller.playerTarget.transform.position;
-            controller.engagementTime = 0f;
-            controller.TurnToPlayerLastKnownPosition();
-        } else if (controller.engagementTime < controller.engagementTimeout) {
-            controller.engagementTime += Time.deltaTime;
-            controller.TurnToPlayerLastKnownPosition();
-        } else {
-            controller.ChangeState(controller.IdleState);
+        public override void Execute() {
+            if (controller.IsPlayerInView()) {
+                controller.playerLastKnownPosition = controller.playerTarget.transform.position;
+                controller.engagementTime = 0f;
+                controller.TurnToPlayerLastKnownPosition();
+            }
+            else if (controller.engagementTime < controller.engagementTimeout) {
+                controller.engagementTime += Time.deltaTime;
+                controller.TurnToPlayerLastKnownPosition();
+            }
+            else {
+                controller.ChangeState(controller.IdleState);
+            }
+        }
+
+        public override void Exit() {
+            controller.StopShooting();
         }
     }
-
-    public override void Exit() {
-        controller.StopShooting();    
-    }
-
 
 }

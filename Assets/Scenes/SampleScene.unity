@@ -399,7 +399,6 @@ GameObject:
   - component: {fileID: 151466450}
   - component: {fileID: 151466449}
   - component: {fileID: 151466448}
-  - component: {fileID: 151466447}
   m_Layer: 0
   m_Name: mesh
   m_TagString: Untagged
@@ -407,27 +406,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!135 &151466447
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 151466446}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &151466448
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1729,9 +1707,10 @@ GameObject:
   m_Component:
   - component: {fileID: 572986287}
   - component: {fileID: 572986288}
+  - component: {fileID: 572986289}
   m_Layer: 0
   m_Name: Turret
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1775,12 +1754,32 @@ MonoBehaviour:
   FOV: 80
   gun: {fileID: 1935906022}
   fireRate: 0.5
+  turnSpeed: 90
   IdleLookTime: 3
   idleRotationSpeed: 90
-  turnSpeed: 90
   engagementTimeout: 5
   engagementTime: 0
-  playerLastKnownPosition: {x: 0, y: 0, z: 0}
+--- !u!135 &572986289
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572986286}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &581138758
 GameObject:
   m_ObjectHideFlags: 0

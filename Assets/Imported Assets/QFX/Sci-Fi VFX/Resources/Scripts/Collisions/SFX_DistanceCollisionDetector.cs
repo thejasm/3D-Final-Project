@@ -34,6 +34,7 @@ namespace QFX.SFX
             bool wasCollided = false;
             Vector3 point = Vector3.zero;
             Vector3 normal = Vector3.zero;
+            GameObject hitObject = null;
 
             switch (DistanceMode)
             {
@@ -53,7 +54,12 @@ namespace QFX.SFX
                         wasCollided = true;
                         point = hit.point;
                         normal = hit.normal;
+                        hitObject = hit.collider.gameObject;
+
                         if (hit.rigidbody != null) hit.rigidbody.AddForceAtPosition(_transform.forward * force, hit.point, ForceMode.Impulse);
+                        if (hitObject.CompareTag("Enemy")) {
+                            hitObject.SendMessage("BulletHit", this.gameObject, SendMessageOptions.DontRequireReceiver);
+                        }
                     }
 
                     break;

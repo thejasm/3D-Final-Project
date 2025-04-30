@@ -8,7 +8,7 @@
 # Enemies
 - [ ] Turret
 	- [ ] Model
-	- [ ] AI
+	- [x] AI
 		States
 		- Idle
 			- Turret faces random directions
