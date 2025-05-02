@@ -57,9 +57,17 @@
 - [ ] Shield
 	- [ ] Shader
 - [ ] Gauss Gun
-- [ ] Wraithe Shot
 	- [ ] Model
+	- [ ] Shader
+	- [ ] Mechanics
+- [ ] Wraith Shot
+	- [ ] Model
+	- [ ] Shader
+	- [ ] Mechanics
 - [x] Machine Gun
+	- [x] Model
+	- [x] Shader
+	- [x] Mechanics
 
 # Misc
 - [ ] Main Menu

@@ -50,7 +50,6 @@ public class TurretController: BaseAIController<TurretController> {
         controller.IdleAnim();
 
         if (controller.IsPlayerInView() && controller.IsPlayerInRange()) controller.ChangeState(controller.AttackState);
-        
     }
 
     public override void Exit() { }

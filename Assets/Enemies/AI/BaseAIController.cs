@@ -62,10 +62,10 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         TurnToTarget(playerLastKnownPosition);
     }
 
-    public void StartShooting() {
+    public virtual void StartShooting() {
         gun.GetComponent<SFX_AIControlledObjectLauncher>().StartShooting(fireRate);
     }
-    public void StopShooting() {
+    public virtual void StopShooting() {
         gun.GetComponent<SFX_AIControlledObjectLauncher>().StopShooting();
     }
 
