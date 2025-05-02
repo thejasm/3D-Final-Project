@@ -17,7 +17,7 @@
 			- for 5 seconds after last engagement with player
 			- When player shoots at turret
 			- Aims at player's last known location and fires
-	- [ ] Mechanics
+	- [x] Mechanics
 		- Slow shooting with explosion
 - [ ] Grunt
 	- [ ] Model
