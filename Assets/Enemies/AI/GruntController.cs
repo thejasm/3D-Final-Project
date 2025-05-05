@@ -6,12 +6,12 @@ using QFX.SFX;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class GruntController: BaseAIController<GruntController> {
-    public float moveSpeed = 5f;
-    public float strafeSpeed = 3f;
+    public float shootFOV = 20f;
+    public float moveSpeed = 400f;
+    public float strafeSpeed = 400f;
     public float[] strafeDuration = { 1f, 3f };
-    public float acceleration = 10f;
-    public float brakingDrag = 5f;
-    public float brakingAngularDrag = 5f;
+    public float acceleration = 20f;
+    public float brakingDrag = 800f;
 
     [HideInInspector]
     public NavMeshAgent agent;
@@ -22,6 +22,7 @@ public class GruntController: BaseAIController<GruntController> {
     private float nextStrafeTime = 0f;
     private float defaultDrag;
     private float defaultAngularDrag;
+    private float defaultTurnSpeed;
     private bool isBraking = false;
 
     public GruntIdleState IdleState { get; private set; }
@@ -38,6 +39,7 @@ public class GruntController: BaseAIController<GruntController> {
 
         defaultDrag = rb.drag;
         defaultAngularDrag = rb.angularDrag;
+        defaultTurnSpeed = turnSpeed;
 
         IdleState = new GruntIdleState(this);
         PursuingState = new GruntPursuingState(this);
@@ -58,12 +60,17 @@ public class GruntController: BaseAIController<GruntController> {
     void FixedUpdate() {
         if (CurrentState == PursuingState) {
             MoveUsingAgent();
-            RotateTowards(agent.desiredVelocity);
+            if (playerLastKnownPosition != Vector3.zero) {
+                Vector3 directionToLKP = playerLastKnownPosition - rb.position;
+            }
         }
         else if (CurrentState == StrafingState) {
             ApplyStrafeMovement();
-            if (playerTarget != null) RotateTowards(playerTarget.transform.position - rb.position);
         }
+    }
+
+    private void LateUpdate() {
+        if (CurrentState != IdleState) HandleFacingRotation();
     }
 
     private void MoveUsingAgent() {
@@ -90,18 +97,17 @@ public class GruntController: BaseAIController<GruntController> {
         rb.AddForce(velocityChange, ForceMode.VelocityChange);
     }
 
-
-    private void RotateTowards(Vector3 direction) {
-        if (isBraking) return;
-
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        Quaternion currentRotation = rb.rotation;
-        Quaternion newRotation = Quaternion.RotateTowards(currentRotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
-        rb.MoveRotation(newRotation);
+    public bool isPlayerInShootView() {
+        Vector3 directionToPlayer = (playerTarget.transform.position - transform.position).normalized;
+        if (Vector3.Angle(transform.forward, directionToPlayer) <= (shootFOV / 2)) return true;
+        return false;
     }
 
-
-
+    public bool isPLKPInView() {
+        Vector3 directionToLKP = (playerLastKnownPosition - transform.position).normalized;
+        if (Vector3.Angle(transform.forward, directionToLKP) <= (shootFOV / 2)) return true;
+        return false;
+    }
 
     private void StartMoving() {
         isBraking = false;
@@ -121,7 +127,6 @@ public class GruntController: BaseAIController<GruntController> {
         isBraking = true;
         if (agent.isOnNavMesh) agent.isStopped = true;
         rb.drag = brakingDrag;
-        rb.angularDrag = brakingAngularDrag;
     }
 
     public void ChooseNewStrafeDirection() {
@@ -133,13 +138,27 @@ public class GruntController: BaseAIController<GruntController> {
         nextStrafeTime = Time.time + Random.Range(strafeDuration[0], strafeDuration[1]);
     }
 
-    public override void Die() {
-        base.Die();
-        Brake();
-        StopShooting();
-        this.enabled = false;
-        if (agent != null) agent.enabled = false;
-        rb.isKinematic = true; // Freeze physics
+    private void HandleFacingRotation() {
+        Vector3 targetPosition = Vector3.zero;
+        bool hasTarget = false;
+
+        if (IsPlayerInView() && playerTarget != null) {
+            targetPosition = playerTarget.transform.position;
+            hasTarget = true;
+        }
+        else if (playerLastKnownPosition != Vector3.zero) {
+            targetPosition = playerLastKnownPosition;
+            hasTarget = true;
+        }
+
+        if (hasTarget) {
+            Vector3 direction = targetPosition - transform.position;
+
+            if (direction.sqrMagnitude > 0.01f) {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            }
+        }
     }
 
     public override void BulletHit(GameObject bullet) {
@@ -181,41 +200,46 @@ public class GruntController: BaseAIController<GruntController> {
         public GruntPursuingState(GruntController ctrl) : base(ctrl) { }
 
         public override void Enter() {
+
             controller.StartMoving();
-            Execute();
         }
 
         public override void Execute() {
-            Vector3 targetPosition;
-            bool targetVisible = controller.IsPlayerInView();
-
-            if (targetVisible) {
-                targetPosition = controller.playerTarget.transform.position;
-                controller.playerLastKnownPosition = targetPosition;
+            // if(controller.IsPlayerInRange() || !controller.IsPlayerInView()) controller.ChangeState(controller.StrafingState);
+            if (controller.IsPlayerInView()) {
+                controller.turnSpeed = controller.defaultTurnSpeed;
+                controller.playerLastKnownPosition = controller.playerTarget.transform.position;
+                if (controller.isPlayerInShootView()) controller.StartShooting();
                 if (controller.IsPlayerInRange()) {
                     controller.ChangeState(controller.StrafingState);
                     return;
                 }
             }
             else {
-                targetPosition = controller.playerLastKnownPosition;
-                float distToLKP = Vector3.Distance(controller.rb.position, targetPosition);
+                controller.turnSpeed = controller.defaultTurnSpeed * 3f;
+                controller.StopShooting();
+                // controller.TurnToPlayerLastKnownPosition();
+                if (controller.isPLKPInView()) {
+                    float distToLKP = Vector3.Distance(controller.rb.position, controller.playerLastKnownPosition);
+                    // Debug.Log($"Distance to LKP: {distToLKP}");
 
-                bool destinationReached = !controller.agent.pathPending &&
-                                     controller.agent.remainingDistance <= controller.agent.stoppingDistance &&
-                                     (!controller.agent.hasPath || controller.rb.velocity.sqrMagnitude < 0.5f); // Check Rigidbody velocity
+                    bool Reached = controller.agent.hasPath &&
+                                              !controller.agent.pathPending &&
+                                              controller.agent.remainingDistance <= controller.agent.stoppingDistance &&
+                                              controller.rb.velocity.sqrMagnitude < 0.5f;
 
-                if (distToLKP <= TargetReachedThreshold || destinationReached) {
-                    controller.ChangeState(controller.IdleState);
-                    return;
+                    if (distToLKP <= TargetReachedThreshold || Reached) {
+                        controller.ChangeState(controller.IdleState);
+                        return;
+                    }
                 }
+
             }
 
-            controller.SetAgentDestination(targetPosition);
+            controller.SetAgentDestination(controller.playerLastKnownPosition);
         }
 
         public override void Exit() {
-            // Movement stop/brake handled by entering state
         }
     }
 
@@ -226,20 +250,19 @@ public class GruntController: BaseAIController<GruntController> {
             controller.StartMoving();
             controller.ChooseNewStrafeDirection();
             controller.CalculateNextStrafeTime();
-            controller.StartShooting();
         }
 
         public override void Execute() {
             controller.TurnToPlayerLastKnownPosition();
             if (!controller.IsPlayerInView()) {
-                controller.ChangeState(controller.IdleState);
+                controller.ChangeState(controller.PursuingState);
             }
             else if (!controller.IsPlayerInRange()) {
                 controller.ChangeState(controller.PursuingState);
             }
             else {
                 controller.playerLastKnownPosition = controller.playerTarget.transform.position;
-
+                if (controller.isPlayerInShootView()) controller.StartShooting();
                 if (Time.time >= controller.nextStrafeTime) {
                     controller.ChooseNewStrafeDirection();
                     controller.CalculateNextStrafeTime();
@@ -248,7 +271,6 @@ public class GruntController: BaseAIController<GruntController> {
         }
 
         public override void Exit() {
-            controller.StopShooting();
         }
     }
 }

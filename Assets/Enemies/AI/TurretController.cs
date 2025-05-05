@@ -51,7 +51,7 @@ public class TurretController: BaseAIController<TurretController> {
         shotspeed = Mathf.Sqrt(distance * EffectiveGravity);
 
         gunController.shotSpeed = shotspeed;
-        Debug.Log($"Calculated shot speed: {shotspeed} for distance: {distance}");
+        //Debug.Log($"Calculated shot speed: {shotspeed} for distance: {distance}");
     }
 
     public override void StartShooting() {

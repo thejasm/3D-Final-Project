@@ -13,6 +13,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
     public GameObject playerTarget;
     public float health = 100f;
+    public GameObject deathExplosion;
     public LayerMask visionObstructionLayer;
     public float range = 20f;
     public float FOV = 80f;
@@ -89,7 +90,8 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
     }
 
     public virtual void Die(){
-        return;
+        Instantiate(deathExplosion, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 
 
@@ -147,9 +149,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
     // DEBUG GIZMOS ---------------------------------------------------------------------------------------------
     private void OnDrawGizmos() {
-        Gizmos.color = new Color(1, 1, 0, 0.1f);
-        Gizmos.DrawSphere(transform.position, range);
-        Gizmos.color = new Color(1, 1, 0, 1f);
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, range);
 
 
