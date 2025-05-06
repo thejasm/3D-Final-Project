@@ -30,7 +30,6 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
     protected Vector3 playerLastKnownPosition = Vector3.zero;
     protected float currentPitch = 0f;
 
-    // TODO: Implement methods for AI
     public bool IsPlayerInRange(){
         if(Vector3.Distance(this.transform.position, playerTarget.transform.position) <= range){
             return true;
@@ -87,13 +86,8 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         TurnToTarget(playerLastKnownPosition);
     }
 
-    public virtual void StartShooting() {
-        gun.GetComponent<SFX_AIControlledObjectLauncher>().StartShooting(fireRate);
-    }
-    public virtual void StopShooting() {
-        gun.GetComponent<SFX_AIControlledObjectLauncher>().StopShooting();
-        Recenter();
-    }
+    public virtual void StartShooting() { }
+    public virtual void StopShooting() { }
 
     public virtual void IdleAnim(){
         if (Time.time >= nextIdleLookTime) {

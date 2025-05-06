@@ -161,6 +161,14 @@ public class GruntController: BaseAIController<GruntController> {
         }
     }
 
+    public override void StartShooting() {
+        gun.GetComponent<SFX_AIControlledObjectLauncher>().StartShooting(fireRate);
+    }
+    public override void StopShooting() {
+        gun.GetComponent<SFX_AIControlledObjectLauncher>().StopShooting();
+        Recenter();
+    }
+
     public override void BulletHit(GameObject bullet) {
         SFX_SimpleProjectile projectile = bullet.GetComponent<SFX_SimpleProjectile>();
         if (projectile != null) {

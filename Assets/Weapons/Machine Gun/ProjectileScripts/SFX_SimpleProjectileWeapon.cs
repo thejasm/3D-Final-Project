@@ -62,9 +62,8 @@ namespace QFX.SFX
             }
 
             var go = Instantiate(Projectile, position, rotation);
-            var emitterKeeper = go.GetComponent<SFX_IEmitterKeeper>();
-            if (emitterKeeper != null)
-                emitterKeeper.EmitterTransform = transform;
+            //var emitterKeeper = go.GetComponent<SFX_IEmitterKeeper>();
+            //if (emitterKeeper != null) emitterKeeper.EmitterTransform = transform;
 
             MuzzleFlash.GetComponent<Animator>().SetTrigger("flash");
             MuzzleFlash.transform.rotation = Quaternion.Euler(

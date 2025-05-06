@@ -12,8 +12,7 @@ namespace QFX.SFX
 
             if (sfxFxObject.FxRotation == SFX_FxRotationType.Normal)
             {
-                go.transform.rotation = Quaternion.FromToRotation(go.transform.up, targetRotation) *
-                                        go.transform.rotation;
+                go.transform.rotation = Quaternion.FromToRotation(go.transform.up, targetRotation);
             }
             else if (sfxFxObject.FxRotation == SFX_FxRotationType.Default)
             {

@@ -2,16 +2,20 @@ using UnityEngine;
 using UnityEngine.AI;
 using QFX.SFX;
 using System.Collections;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class TankController: BaseAIController<TankController> {
     public float moveSpeed = 4.0f;
     public float patrolPointReachThreshold = 1.5f;
+    public float coolDown = 2f;
 
     [HideInInspector]
     public NavMeshAgent agent;
     private Vector3 currentPatrolTarget = Vector3.zero;
     private bool hasPatrolTarget = false;
+    private GaussGunController gunController;
+    private bool readyToFire = true;
 
     public TankIdleState IdleState { get; private set; }
     public TankDistancingState DistancingState { get; private set; }
@@ -21,6 +25,7 @@ public class TankController: BaseAIController<TankController> {
     protected override void Awake() {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
+        gunController = gun.GetComponent<GaussGunController>();
 
         agent.speed = moveSpeed;
         agent.updateRotation = true;
@@ -42,8 +47,6 @@ public class TankController: BaseAIController<TankController> {
         }
         base.Update();
     }
-
-    // --- AI Helper Methods ---
 
     public void SetAgentDestination(Vector3 targetPosition) {
         if (agent.isOnNavMesh) {
@@ -146,6 +149,22 @@ public class TankController: BaseAIController<TankController> {
         return false;
     }
 
+    public override void StartShooting() {
+        if (gunController.ReadyToFire) {
+            gunController.Fire();
+            StartCoroutine(OnCoolDown());
+        }
+        else if (this.readyToFire) {
+            gunController.ChargeUp();
+        }
+    }
+
+    public IEnumerator OnCoolDown() {
+        readyToFire = false;
+        yield return new WaitForSeconds(coolDown);
+        readyToFire = true;
+    }
+
     public override void BulletHit(GameObject bullet) {
         SFX_SimpleProjectile projectile = bullet.GetComponent<SFX_SimpleProjectile>();
         if (projectile != null) {
@@ -219,13 +238,13 @@ public class TankController: BaseAIController<TankController> {
         public override void Enter() {
             Debug.Log($"[{controller.gameObject.name}] Entering Distancing State."); // For debugging
             controller.agent.speed = controller.moveSpeed; // Ensure speed is set correctly
-            controller.StartShooting();
             recalculateTimer = 0f; // Force immediate calculation on enter
                                    // Optional: Stop movement initially until first calculation?
                                    // controller.StopMovement();
         }
 
         public override void Execute() {
+            controller.StartShooting();
             // --- Check Player Visibility ---
             if (!controller.IsPlayerInView()) {
                 controller.ChangeState(controller.SearchingState);

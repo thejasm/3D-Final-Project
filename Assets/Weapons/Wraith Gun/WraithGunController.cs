@@ -21,10 +21,13 @@ public class WraithGunController : MonoBehaviour
     }
 
     public void Fire() {
-        GameObject shotInstance = Instantiate(wraithShotPrefab, shotOrigin.position, shotOrigin.rotation);
-        Rigidbody rb = shotInstance.GetComponent<Rigidbody>();
-        rb.velocity = shotOrigin.forward * shotSpeed;
-        gunAnimator.SetTrigger("Fire");
-        ReadyToFire = false;
+        if (!ReadyToFire) gunAnimator.ResetTrigger("ChargeUp");
+        else {
+            GameObject shotInstance = Instantiate(wraithShotPrefab, shotOrigin.position, shotOrigin.rotation);
+            Rigidbody rb = shotInstance.GetComponent<Rigidbody>();
+            rb.velocity = shotOrigin.forward * shotSpeed;
+            gunAnimator.SetTrigger("Fire");
+            ReadyToFire = false;
+        }
     }
 }
