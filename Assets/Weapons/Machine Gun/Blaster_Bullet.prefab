@@ -90,7 +90,7 @@ MonoBehaviour:
   Delay: 0
   FxObjects:
   - Fx: {fileID: 1734532791694354, guid: 4b5b25b346624f6b83a0c0a8704e157b, type: 3}
-    FxRotation: 2
+    FxRotation: 1
 --- !u!114 &114620022445763740
 MonoBehaviour:
   m_ObjectHideFlags: 0

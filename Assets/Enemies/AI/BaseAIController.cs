@@ -1,6 +1,7 @@
 using QFX.SFX;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.ProBuilder;
@@ -27,6 +28,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
     protected float nextIdleLookTime = 0f;
     protected Quaternion targetIdleRotation;
     protected Vector3 playerLastKnownPosition = Vector3.zero;
+    protected float currentPitch = 0f;
 
     // TODO: Implement methods for AI
     public bool IsPlayerInRange(){
@@ -53,10 +55,32 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         return false;
     }
 
-    public void TurnToTarget(Vector3 targetPosition) {
-        Vector3 direction = (targetPosition - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
+    public virtual void TurnToTarget(Vector3 targetPosition) {
+        Vector3 directionToTargetHorizontal = targetPosition - transform.position;
+        directionToTargetHorizontal.y = 0;
+
+        Quaternion horizontalLookRotation = Quaternion.identity;
+        if (directionToTargetHorizontal.sqrMagnitude > 0.01f) horizontalLookRotation = Quaternion.LookRotation(directionToTargetHorizontal.normalized);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, horizontalLookRotation, turnSpeed * Time.deltaTime);
+
+
+        Vector3 directionToTargetVertical = targetPosition - gun.transform.position;
+        Quaternion verticalLookRotation = Quaternion.LookRotation(directionToTargetVertical);
+        Quaternion targetLocalRotation = Quaternion.Inverse(transform.rotation) * verticalLookRotation;
+
+        float desiredPitch = targetLocalRotation.eulerAngles.x;
+
+        if (desiredPitch > 180f) desiredPitch -= 360f;
+        if (desiredPitch < -180f) desiredPitch += 360f;
+
+        currentPitch = Mathf.MoveTowardsAngle(gun.transform.localEulerAngles.x, desiredPitch, turnSpeed * Time.deltaTime);
+        gun.transform.localRotation = Quaternion.Euler(currentPitch, 0, 0);
+    }
+
+    public virtual void Recenter() {
+        currentPitch = Mathf.MoveTowardsAngle(gun.transform.localEulerAngles.x, 0, turnSpeed * Time.deltaTime);
+        gun.transform.localRotation = Quaternion.Euler(currentPitch, 0, 0);
     }
 
     public void TurnToPlayerLastKnownPosition() {
@@ -68,6 +92,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
     }
     public virtual void StopShooting() {
         gun.GetComponent<SFX_AIControlledObjectLauncher>().StopShooting();
+        Recenter();
     }
 
     public virtual void IdleAnim(){
@@ -149,8 +174,8 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
     // DEBUG GIZMOS ---------------------------------------------------------------------------------------------
     private void OnDrawGizmos() {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, range);
+        Handles.color = Color.yellow;
+        Handles.DrawWireDisc(this.transform.position, Vector3.up, range);
 
 
         if (playerTarget != null) {
@@ -160,10 +185,13 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
             } else  if (IsPlayerInRange()) {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(this.transform.position, playerTarget.transform.position);
-            } else {
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(this.transform.position, playerTarget.transform.position);
             }
+            Gizmos.color = Color.yellow;
+            Vector3 fovL = Quaternion.Euler(0, -FOV / 2, 0) * transform.forward;
+            Vector3 fovR = Quaternion.Euler(0, FOV / 2, 0) * transform.forward;
+            Handles.color = new Color(1, 1, 0, 0.1f);
+            Handles.DrawSolidArc(transform.position, Vector3.up, fovL, FOV, range);
+
         }
 
         Gizmos.color = new Color(1f, 1f, 1f, 0.3f);

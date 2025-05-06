@@ -14213,7 +14213,7 @@ GameObject:
   - component: {fileID: 400006}
   - component: {fileID: -4617182015851251337}
   m_Layer: 0
-  m_Name: Explosion4
+  m_Name: EnemyExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

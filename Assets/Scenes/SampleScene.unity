@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &52874165
 Transform:
   m_ObjectHideFlags: 0
@@ -1620,7 +1620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &449102382
 Transform:
   m_ObjectHideFlags: 0
@@ -2446,7 +2446,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &572986287
 Transform:
   m_ObjectHideFlags: 0
@@ -2632,15 +2632,17 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 685990381}
-  - component: {fileID: 685990383}
+  - component: {fileID: 685990384}
   - component: {fileID: 685990382}
+  - component: {fileID: 685990385}
+  - component: {fileID: 685990386}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &685990381
 Transform:
   m_ObjectHideFlags: 0
@@ -2650,8 +2652,8 @@ Transform:
   m_GameObject: {fileID: 685990380}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.9, y: 25.21, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -31.3, y: 26.77, z: -7.8}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1097993702}
@@ -2679,7 +2681,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &685990383
+--- !u!114 &685990384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2688,26 +2690,75 @@ MonoBehaviour:
   m_GameObject: {fileID: 685990380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ffd5b2f2cbf6ff428dba8952750db23, type: 3}
+  m_Script: {fileID: 11500000, guid: 1295ebf4ab6ed4b43b3dfd95affb6da5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentStateName: 
   playerTarget: {fileID: 689818327}
-  health: 100
+  health: 500
   deathExplosion: {fileID: 100006, guid: 1b0efe600cd9bcd48ae21ef3dffffff8, type: 3}
   visionObstructionLayer:
     serializedVersion: 2
     m_Bits: 64
-  range: 20
-  FOV: 80
+  range: 40
+  FOV: 40
   gun: {fileID: 1097993701}
-  fireRate: 0.5
-  turnSpeed: 90
-  IdleLookTime: 3
+  fireRate: 0.75
+  turnSpeed: 180
+  IdleLookTime: 2
   idleRotationSpeed: 90
-  engagementTimeout: 5
-  coolDown: 3
-  engagementTime: 0
+  moveSpeed: 100
+  patrolPointReachThreshold: 1.5
+  agent: {fileID: 0}
+--- !u!195 &685990385
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685990380}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 2
+--- !u!54 &685990386
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685990380}
+  serializedVersion: 4
+  m_Mass: 100
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 32
+  m_CollisionDetection: 0
 --- !u!1 &689818327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c5154b9f2419810409a6b58db3c5af88,
@@ -4116,7 +4167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1098030672
 Transform:
   m_ObjectHideFlags: 0
@@ -12951,7 +13002,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1980076191
 Transform:
   m_ObjectHideFlags: 0

@@ -35,6 +35,16 @@ public class TurretController: BaseAIController<TurretController> {
 
     // Update method is handled by BaseAIController
 
+    public override void TurnToTarget(Vector3 targetPosition) {
+        Vector3 directionToTargetHorizontal = targetPosition - transform.position;
+        directionToTargetHorizontal.y = 0;
+
+        Quaternion horizontalLookRotation = Quaternion.identity;
+        if (directionToTargetHorizontal.sqrMagnitude > 0.01f) horizontalLookRotation = Quaternion.LookRotation(directionToTargetHorizontal.normalized);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, horizontalLookRotation, turnSpeed * Time.deltaTime);
+    }
+
     public override void BulletHit(GameObject bullet) {
         SFX_SimpleProjectile projectile = bullet.GetComponent<SFX_SimpleProjectile>();
         playerLastKnownPosition = projectile.CreationPosition;
