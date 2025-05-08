@@ -52,8 +52,7 @@ public class TankController: BaseAIController<TankController> {
         if (agent.isOnNavMesh) {
             agent.isStopped = false;
             agent.SetDestination(targetPosition);
-        }
-        else {
+        } else {
             Debug.LogWarning($"{gameObject.name}: Agent not on NavMesh, cannot set destination.", this);
         }
     }
@@ -61,13 +60,11 @@ public class TankController: BaseAIController<TankController> {
     public void StopMovement() {
         if (agent.isOnNavMesh && !agent.isStopped) {
             agent.isStopped = true;
-            // Optional: Reset path if needed, but stopping is often sufficient
-            // agent.ResetPath();
+            agent.ResetPath();
         }
     }
 
     public bool PickNewPatrolPoint() {
-        // Use controller.range as the radius for patrolling
         float patrolRadius = range;
         Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
         randomDirection += transform.position;
@@ -77,8 +74,7 @@ public class TankController: BaseAIController<TankController> {
             currentPatrolTarget = hit.position;
             hasPatrolTarget = true;
             return true;
-        }
-        else {
+        } else {
             currentPatrolTarget = transform.position;
             hasPatrolTarget = false;
             Debug.LogWarning($"{gameObject.name}: Could not find valid NavMesh point for patrol within range {patrolRadius}.", this);
@@ -87,53 +83,32 @@ public class TankController: BaseAIController<TankController> {
     }
 
     public Vector3 CalculateRetreatPoint() {
-        if (playerTarget == null) {
-            Debug.LogWarning($"[{gameObject.name}] CalculateRetreatPoint: Player target is null. Returning current position.");
-            return transform.position;
-        }
+        if (playerTarget == null) return transform.position;
 
-        float desiredDist = range; // Use the 'range' variable from BaseAIController
         Vector3 directionToPlayer = playerTarget.transform.position - transform.position;
         float currentDistance = directionToPlayer.magnitude;
-
-        // Calculate the ideal position directly away from the player at the desired distance
-        // We want to move FROM currentDistance TO desiredDist, so the distance to move is (desiredDist - currentDistance)
-        // The direction is AWAY from the player (-directionToPlayer.normalized)
         Vector3 directionAwayFromPlayer = -directionToPlayer.normalized;
-        Vector3 idealRetreatPos = transform.position + directionAwayFromPlayer * (desiredDist - currentDistance);
+        Vector3 idealRetreatPos = transform.position + directionAwayFromPlayer * (range - currentDistance);
 
-        // --- DEBUGGING START ---
-        // Debug.DrawLine(transform.position, playerTarget.transform.position, Color.red, 0.5f); // Line to player
-        // Debug.DrawLine(transform.position, idealRetreatPos, Color.cyan, 0.5f); // Line to ideal retreat point
-        // --- DEBUGGING END ---
-
+        Debug.DrawLine(transform.position, playerTarget.transform.position, Color.red, 0.5f); // Line to player
+        Debug.DrawLine(transform.position, idealRetreatPos, Color.cyan, 0.5f); // Line to ideal retreat point
 
         NavMeshHit hit;
-        float sampleRadius = 4.0f; // Increased sample radius
 
-        // Try to find a valid NavMesh point near the ideal position
-        if (NavMesh.SamplePosition(idealRetreatPos, out hit, sampleRadius, NavMesh.AllAreas)) {
-            // Found a valid point near the ideal retreat spot
-            Debug.Log($"[{gameObject.name}] CalculateRetreatPoint: Found point near ideal: {hit.position} (Distance from current: {Vector3.Distance(transform.position, hit.position)})"); // DEBUG
+        if (NavMesh.SamplePosition(idealRetreatPos, out hit, range, NavMesh.AllAreas)) {
+            Debug.Log($"[{gameObject.name}] CalculateRetreatPoint: Found point near ideal: {hit.position} (Distance from current: {Vector3.Distance(transform.position, hit.position)})");
             return hit.position;
-        }
-        else {
-            Debug.LogWarning($"[{gameObject.name}] CalculateRetreatPoint: Failed to sample near ideal position: {idealRetreatPos}. Trying fallback."); // DEBUG
+        } else {
+            Debug.LogWarning($"[{gameObject.name}] CalculateRetreatPoint: Failed to sample near ideal position: {idealRetreatPos}. Trying fallback.");
 
-            // Fallback: Calculate a point further away in the retreat direction if sampling failed
-            float fallbackDistance = 5.0f; // Try moving a bit further for fallback
-            Vector3 fallbackPos = transform.position + directionAwayFromPlayer * fallbackDistance;
-            // --- DEBUGGING START ---
-            // Debug.DrawLine(transform.position, fallbackPos, Color.magenta, 0.5f); // Line to fallback point
-            // --- DEBUGGING END ---
+            Vector3 fallbackPos = transform.position + directionAwayFromPlayer * range;
+            Debug.DrawLine(transform.position, fallbackPos, Color.magenta, 0.5f); // Line to fallback point
 
-            if (NavMesh.SamplePosition(fallbackPos, out hit, sampleRadius, NavMesh.AllAreas)) {
-                // Use this slightly further point if valid
+            if (NavMesh.SamplePosition(fallbackPos, out hit, range, NavMesh.AllAreas)) {
                 Debug.LogWarning($"[{gameObject.name}] CalculateRetreatPoint: Found point near fallback: {hit.position} (Distance from current: {Vector3.Distance(transform.position, hit.position)})"); // DEBUG
                 return hit.position;
             }
             else {
-                // Last resort: Stay put if no valid retreat point found
                 Debug.LogError($"[{gameObject.name}] CalculateRetreatPoint: Failed to find ANY valid retreat point on NavMesh. Returning current position."); // DEBUG
                 return transform.position;
             }
@@ -142,7 +117,6 @@ public class TankController: BaseAIController<TankController> {
 
     public bool ReachedDestination(float threshold) {
         if (!agent.isOnNavMesh || agent.pathPending) return false;
-        // Check remaining distance and if the agent has stopped trying to pathfind
         if (agent.remainingDistance <= threshold && !agent.hasPath && agent.velocity.sqrMagnitude < 0.1f) {
             return true;
         }
