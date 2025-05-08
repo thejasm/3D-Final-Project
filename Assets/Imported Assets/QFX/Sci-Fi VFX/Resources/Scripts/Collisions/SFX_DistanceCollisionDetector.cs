@@ -54,7 +54,7 @@ namespace QFX.SFX
                         wasCollided = true;
                         point = hit.point;
                         normal = hit.normal;
-                        Debug.Log($"Gauss hit normal: {normal}");
+                        //Debug.Log($"Gauss hit normal: {normal}");
                         hitObject = hit.collider.gameObject;
 
                         if (hit.rigidbody != null) hit.rigidbody.AddForceAtPosition(_transform.forward * force, hit.point, ForceMode.Impulse);
