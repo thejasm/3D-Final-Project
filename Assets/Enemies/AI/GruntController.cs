@@ -217,7 +217,10 @@ public class GruntController: BaseAIController<GruntController> {
             if (controller.IsPlayerInView()) {
                 controller.turnSpeed = controller.defaultTurnSpeed;
                 controller.playerLastKnownPosition = controller.playerTarget.transform.position;
-                if (controller.isPlayerInShootView()) controller.StartShooting();
+                if (controller.isPlayerInShootView()) {
+                    controller.TurnToPlayerLastKnownPosition();
+                    controller.StartShooting();
+                }
                 if (controller.IsPlayerInRange()) {
                     controller.ChangeState(controller.StrafingState);
                     return;

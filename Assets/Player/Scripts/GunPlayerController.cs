@@ -30,7 +30,7 @@ public class GunPlayerController: MonoBehaviour
         if (Physics.Raycast(ray, out hit)) {
             if (gunIndex == 1) {
                 guns[gunIndex].transform.LookAt(hit.point);
-                guns[gunIndex].transform.rotation *= Quaternion.Euler(-30, 0, 0);
+                guns[gunIndex].transform.rotation *= Quaternion.Euler(-10, 0, 0);
                 gunAnim.transform.LookAt(hit.point);
             } else {
                 guns[gunIndex].transform.LookAt(hit.point);
@@ -96,6 +96,12 @@ public class GunPlayerController: MonoBehaviour
         ready = false;
         gunIndex = i;
         switchCoroutine = StartCoroutine(AnimateGunFloats(gunIndex, gunAnimDuration));
+        
+        if (gunIndex > 0) {
+            guns[gunIndex].GetComponent<Animator>().ResetTrigger("ChargeUp");
+            guns[gunIndex].GetComponent<Animator>().ResetTrigger("Fire");
+            guns[gunIndex].GetComponent<Animator>().ResetTrigger("Cooldown");
+        }
     }
 
     IEnumerator AnimateGunFloats(int targetIndex, float duration) {

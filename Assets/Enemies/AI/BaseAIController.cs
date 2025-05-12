@@ -45,36 +45,22 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
         if (Vector3.Angle(transform.forward, directionToPlayer) <= (FOV / 2)) {
             if (!Physics.Raycast(positionToCheckFrom, directionToPlayer, distanceToPlayer, visionObstructionLayer)) {
-                // If the raycast DOES NOT hit an obstruction, the player is in view.
                 return true;
             }
-            // Raycast hit an obstruction, player is blocked.
         }
 
         return false;
     }
 
     public virtual void TurnToTarget(Vector3 targetPosition) {
-        Vector3 directionToTargetHorizontal = targetPosition - transform.position;
-        directionToTargetHorizontal.y = 0;
+        Vector3 directionToTarget = targetPosition - transform.position;
 
-        Quaternion horizontalLookRotation = Quaternion.identity;
-        if (directionToTargetHorizontal.sqrMagnitude > 0.01f) horizontalLookRotation = Quaternion.LookRotation(directionToTargetHorizontal.normalized);
+        if (directionToTarget.sqrMagnitude > 0.01f) {
+            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, horizontalLookRotation, turnSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+        }
 
-
-        Vector3 directionToTargetVertical = targetPosition - gun.transform.position;
-        Quaternion verticalLookRotation = Quaternion.LookRotation(directionToTargetVertical);
-        Quaternion targetLocalRotation = Quaternion.Inverse(transform.rotation) * verticalLookRotation;
-
-        float desiredPitch = targetLocalRotation.eulerAngles.x;
-
-        if (desiredPitch > 180f) desiredPitch -= 360f;
-        if (desiredPitch < -180f) desiredPitch += 360f;
-
-        currentPitch = Mathf.MoveTowardsAngle(gun.transform.localEulerAngles.x, desiredPitch, turnSpeed * Time.deltaTime);
-        gun.transform.localRotation = Quaternion.Euler(currentPitch, 0, 0);
     }
 
     public virtual void Recenter() {
