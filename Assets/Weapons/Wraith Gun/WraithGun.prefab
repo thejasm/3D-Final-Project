@@ -109,13 +109,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2245667212637577120}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: 0.9850583, w: -0.17222129}
+  m_LocalRotation: {x: 0, y: -0, z: 0.9848078, w: -0.17364809}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8559355468568966926}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 199.834}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 200}
 --- !u!33 &6764569494071897118
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -207,12 +207,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: de5dd53cd5464984487f76515b1802a1,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.92387956
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de5dd53cd5464984487f76515b1802a1,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.38268343
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de5dd53cd5464984487f76515b1802a1,
         type: 3}
@@ -227,7 +227,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: de5dd53cd5464984487f76515b1802a1,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de5dd53cd5464984487f76515b1802a1,
         type: 3}
@@ -366,8 +366,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunAnimator: {fileID: 1544209183631123613}
   wraithShotPrefab: {fileID: 100002, guid: e19d7ab0318a7e94dbaa099094ef4deb, type: 3}
-  shotOrigin: {fileID: 0}
+  shotOrigin: {fileID: 8531727099381969089}
+  shotRadius: 15
   shotSpeed: 21
+  shotDamage: 50
+  shotForce: 1500
   ReadyToFire: 0
 --- !u!1001 &8531727099381836355
 PrefabInstance:
@@ -387,11 +390,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e19d7ab0318a7e94dbaa099094ef4deb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e19d7ab0318a7e94dbaa099094ef4deb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.114
+      value: 6.92
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e19d7ab0318a7e94dbaa099094ef4deb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -420,6 +423,11 @@ PrefabInstance:
     - target: {fileID: 400002, guid: e19d7ab0318a7e94dbaa099094ef4deb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202544752959512557, guid: e19d7ab0318a7e94dbaa099094ef4deb,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3092533140834581833, guid: e19d7ab0318a7e94dbaa099094ef4deb, type: 3}

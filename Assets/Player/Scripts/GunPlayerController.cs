@@ -5,13 +5,14 @@ using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class GunAimer : MonoBehaviour
+public class GunPlayerController: MonoBehaviour
 {
     [SerializeField]
     public GameObject[] guns;
     public GameObject gunAnim;
     public float gunAnimDuration = 0.5f;
     private int gunIndex = 0;
+    // 0 = Machine Gun, 1 = Wraith, 2 = Gauss
     private bool ready = true;
     private Coroutine switchCoroutine;
 
@@ -27,10 +28,17 @@ public class GunAimer : MonoBehaviour
     void Update() {
         ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit)) {
-            guns[gunIndex].transform.LookAt(hit.point);
-            gunAnim.transform.LookAt(hit.point);
-            //gun.transform.position = new Vector3(2.4f, 0f, 2f);
-        }
+            if (gunIndex == 1) {
+                guns[gunIndex].transform.LookAt(hit.point);
+                guns[gunIndex].transform.rotation *= Quaternion.Euler(-30, 0, 0);
+                gunAnim.transform.LookAt(hit.point);
+            } else {
+                guns[gunIndex].transform.LookAt(hit.point);
+                gunAnim.transform.LookAt(hit.point);
+            }
+
+                //gun.transform.position = new Vector3(2.4f, 0f, 2f);
+            }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
             if (gunIndex != 0 && ready) SwitchGun(0);
@@ -40,6 +48,14 @@ public class GunAimer : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha3)) {
             if (gunIndex != 2 && ready) SwitchGun(2);
+        }
+
+        if (gunIndex == 1) {
+            if (Input.GetMouseButtonDown(0)) guns[gunIndex].GetComponent<WraithGunController>().ChargeUp();
+            if (Input.GetMouseButtonUp(0)) guns[gunIndex].GetComponent<WraithGunController>().Fire();
+        } else if (gunIndex == 2) {
+            if (Input.GetMouseButtonDown(0)) guns[gunIndex].GetComponent<GaussGunController>().ChargeUp();
+            if (Input.GetMouseButtonUp(0)) guns[gunIndex].GetComponent<GaussGunController>().Fire();
         }
     }
 

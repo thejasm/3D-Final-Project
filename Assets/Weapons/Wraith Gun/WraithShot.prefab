@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 100008, guid: cd3b36bb01277224c82223e47fdfcc14, type: 3}
   radius: 15
-  maxDamage: 20
+  maxDamage: 50
   maxForce: 1500
   FalloffCurve:
     serializedVersion: 2
@@ -113,6 +113,15 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.49929053
+      value: 0.7760191
+      inSlope: -1.6168904
+      outSlope: -1.6168904
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.9226045
       value: -0.012500001

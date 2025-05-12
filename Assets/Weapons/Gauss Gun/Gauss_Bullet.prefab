@@ -69,8 +69,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RunAtStart: 1
   Delay: 0
-  Speed: 250
-  damage: 10
+  Speed: 500
+  damage: 40
   DestroyAfterCollision: 1
   DestroyAfterCollisionTimeout: 1
   CreationPosition: {x: 0, y: 0, z: 0}

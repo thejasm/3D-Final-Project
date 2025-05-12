@@ -4,7 +4,8 @@
 	 - [x] Aiming
 		 - [x] Zoom
 		 - [x] Reticle
- - [ ] Gun swap
+ - [x] Gun swap
+ - [x] Different Gun Mechanics
 
 # Enemies
 - [ ] Turret
@@ -15,12 +16,12 @@
 - [ ] Grunt
 	- [ ] Model
 	- [x] AI
-	- [ ] Mechanics
+	- [x] Mechanics
 		- machine guns x2
 - [ ] Tank
 	- [ ] Model
 	- [x] AI
-	- [ ] Mechanics
+	- [x] Mechanics
 		- charge up gauss shot
 
 # Abilities

@@ -1265,7 +1265,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &471121050
 Transform:
   m_ObjectHideFlags: 0
@@ -3891,7 +3891,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: c5154b9f2419810409a6b58db3c5af88,
         type: 3}
       insertIndex: 0
-      addedObject: {fileID: 2040633398}
+      addedObject: {fileID: 471121050}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: c5154b9f2419810409a6b58db3c5af88,
         type: 3}
       insertIndex: 1
@@ -3899,7 +3899,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: c5154b9f2419810409a6b58db3c5af88,
         type: 3}
       insertIndex: 2
-      addedObject: {fileID: 471121050}
+      addedObject: {fileID: 2040633398}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: c5154b9f2419810409a6b58db3c5af88,
         type: 3}
       insertIndex: -1
@@ -4873,6 +4873,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1669275771}
     m_Modifications:
+    - target: {fileID: 34466238504716790, guid: 10875f34f2c25e844b475742208a679c,
+        type: 3}
+      propertyPath: shotSpeed
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 2470979651472099276, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -5314,8 +5319,8 @@ MonoBehaviour:
   - {fileID: 471121049}
   - {fileID: 1650991798}
   - {fileID: 2040633397}
-  gunAnim: {fileID: 0}
-  gunIndex: 0
+  gunAnim: {fileID: 314723045}
+  gunAnimDuration: 0.5
   cam: {fileID: 1113251410}
 --- !u!114 &1669275776
 MonoBehaviour:
@@ -11158,41 +11163,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1669275771}
     m_Modifications:
-    - target: {fileID: 530702576928643411, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.08715578
-      objectReference: {fileID: 0}
-    - target: {fileID: 530702576928643411, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 530702576928643411, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.9961947
-      objectReference: {fileID: 0}
-    - target: {fileID: 530702576928643411, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 190
-      objectReference: {fileID: 0}
-    - target: {fileID: 2470979651472099276, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9961947
-      objectReference: {fileID: 0}
-    - target: {fileID: 2470979651472099276, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.08715578
-      objectReference: {fileID: 0}
-    - target: {fileID: 2470979651472099276, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -10
-      objectReference: {fileID: 0}
     - target: {fileID: 8559355468568966926, guid: 3a676de07c95d9b45ac7f2323942967d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11247,11 +11217,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WraithGun
-      objectReference: {fileID: 0}
-    - target: {fileID: 9044108621405351348, guid: 3a676de07c95d9b45ac7f2323942967d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
