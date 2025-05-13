@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStateName: 
   playerTarget: {fileID: 0}
-  health: 100
+  health: 30
   deathExplosion: {fileID: 100006, guid: 1b0efe600cd9bcd48ae21ef3dffffff8, type: 3}
   visionObstructionLayer:
     serializedVersion: 2

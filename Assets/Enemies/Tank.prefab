@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6816600668151382282}
   - component: {fileID: 1929046262448134909}
   - component: {fileID: 8753038046135784782}
+  - component: {fileID: 4067971329347333943}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Enemy
@@ -51,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStateName: 
   playerTarget: {fileID: 0}
-  health: 500
+  health: 200
   deathExplosion: {fileID: 100006, guid: 1b0efe600cd9bcd48ae21ef3dffffff8, type: 3}
   visionObstructionLayer:
     serializedVersion: 2
@@ -66,6 +67,7 @@ MonoBehaviour:
   moveSpeed: 100
   patrolPointReachThreshold: 1.5
   coolDown: 2
+  angleCorrectionLimit: 10
   agent: {fileID: 0}
 --- !u!135 &6816600668151382282
 SphereCollider:
@@ -137,6 +139,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!95 &4067971329347333943
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7859268155904123482}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fb561caf16814874499fce51a0369daa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1727886324067383567
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -157,18 +180,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2832507326943573349, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832507326943573349, guid: 10875f34f2c25e844b475742208a679c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832507326943573349, guid: 10875f34f2c25e844b475742208a679c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832507326943573349, guid: 10875f34f2c25e844b475742208a679c,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.539
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2832507326943573349, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.235
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2832507326943573349, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.951
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8559355468568966926, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
@@ -188,17 +226,17 @@ PrefabInstance:
     - target: {fileID: 8559355468568966926, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.539
       objectReference: {fileID: 0}
     - target: {fileID: 8559355468568966926, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.235
       objectReference: {fileID: 0}
     - target: {fileID: 8559355468568966926, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2.951
       objectReference: {fileID: 0}
     - target: {fileID: 8559355468568966926, guid: 10875f34f2c25e844b475742208a679c,
         type: 3}
@@ -393,6 +431,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.25
       objectReference: {fileID: 0}
+    - target: {fileID: -4744265601807116987, guid: 976ec8d94983cb143ac7b6d249836614,
+        type: 3}
+      propertyPath: m_Name
+      value: TankGun1
+      objectReference: {fileID: 0}
     - target: {fileID: -4044671773113788389, guid: 976ec8d94983cb143ac7b6d249836614,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -437,6 +480,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: -442689688915596923, guid: 976ec8d94983cb143ac7b6d249836614,
+        type: 3}
+      propertyPath: m_Name
+      value: TankGun
       objectReference: {fileID: 0}
     - target: {fileID: -37445397394511822, guid: 976ec8d94983cb143ac7b6d249836614,
         type: 3}

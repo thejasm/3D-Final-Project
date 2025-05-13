@@ -8,18 +8,18 @@
  - [x] Different Gun Mechanics
 
 # Enemies
-- [ ] Turret
-	- [ ] Model
+- [x] Turret
+	- [x] Model
 	- [x] AI
 	- [x] Mechanics
 		- Slow shooting with explosion
-- [ ] Grunt
-	- [ ] Model
+- [x] Grunt
+	- [x] Model
 	- [x] AI
 	- [x] Mechanics
 		- machine guns x2
-- [ ] Tank
-	- [ ] Model
+- [x] Tank
+	- [x] Model
 	- [x] AI
 	- [x] Mechanics
 		- charge up gauss shot
@@ -46,3 +46,4 @@
 - [ ] Main Menu
 - [ ] Pause Menu
 - [ ] UI
+- [ ] Level Design

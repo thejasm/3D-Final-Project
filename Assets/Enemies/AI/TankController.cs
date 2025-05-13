@@ -92,37 +92,23 @@ public class TankController: BaseAIController<TankController> {
 
         NavMeshHit hit;
 
-        if (NavMesh.SamplePosition(idealRetreatPos, out hit, range, NavMesh.AllAreas)) {
-            Debug.Log($"[{gameObject.name}] CalculateRetreatPoint: Found point near ideal: {hit.position} (Distance from current: {Vector3.Distance(transform.position, hit.position)})");
-            return hit.position;
-        }
+        if (NavMesh.SamplePosition(idealRetreatPos, out hit, range, NavMesh.AllAreas)) return hit.position;
         else {
-            Debug.LogWarning($"[{gameObject.name}] CalculateRetreatPoint: Failed to sample near ideal position: {idealRetreatPos}. Trying fallback.");
-
             Vector3 fallbackPos = transform.position + directionAwayFromPlayer * range;
             Debug.DrawLine(transform.position, fallbackPos, Color.magenta, 0.5f);
 
-            if (NavMesh.SamplePosition(fallbackPos, out hit, range, NavMesh.AllAreas)) {
-                Debug.LogWarning($"[{gameObject.name}] CalculateRetreatPoint: Found point near fallback: {hit.position} (Distance from current: {Vector3.Distance(transform.position, hit.position)})");
-                return hit.position;
-            }
-            else {
-                Debug.LogError($"[{gameObject.name}] CalculateRetreatPoint: Failed to find ANY valid retreat point on NavMesh. Returning current position.");
-                return transform.position;
-            }
+            if (NavMesh.SamplePosition(fallbackPos, out hit, range, NavMesh.AllAreas)) return hit.position;
+            else return transform.position;
         }
     }
 
     public bool ReachedDestination(float threshold) {
         if (!agent.isOnNavMesh || agent.pathPending) return false;
-        if (agent.remainingDistance <= threshold && !agent.hasPath && agent.velocity.sqrMagnitude < 0.1f) {
-            return true;
-        }
+        if (agent.remainingDistance <= threshold && !agent.hasPath && agent.velocity.sqrMagnitude < 0.1f) return true;
         return false;
     }
 
     public override void StartShooting() {
-
         if (!IsPlayerInRange() && playerLastKnownPosition != Vector3.zero) {
             Vector3 currentGunDirection = gun.transform.forward;
 
@@ -132,7 +118,6 @@ public class TankController: BaseAIController<TankController> {
                 float angleDifference = Vector3.Angle(currentGunDirection, directionToLKP);
 
                 if (angleDifference <= angleCorrectionLimit) {
-
                     Quaternion lookRotationToLKP_Global = Quaternion.LookRotation(directionToLKP);
 
                     Quaternion lookRotationToLKP_Local = Quaternion.Inverse(transform.rotation) * lookRotationToLKP_Global;
@@ -142,16 +127,15 @@ public class TankController: BaseAIController<TankController> {
                     float newPitch = gun.transform.localEulerAngles.x;
                     if (newPitch > 180f) newPitch -= 360f;
                     currentPitch = newPitch;
-
                 }
             }
         }
 
         if (gunController.ReadyToFire) {
+            this.GetComponent<Animator>().SetTrigger("Fire");
             gunController.Fire();
             StartCoroutine(OnCoolDown());
-        }
-        else if (this.readyToFire) {
+        } else if (this.readyToFire) {
             gunController.ChargeUp();
         }
     }
@@ -167,24 +151,18 @@ public class TankController: BaseAIController<TankController> {
         if (projectile != null) {
             playerLastKnownPosition = projectile.CreationPosition;
             TakeDamage(projectile.damage);
-            if (health <= 0) {
-                Die();
-            }
+            if (health <= 0) Die();
             else {
 
                 if (IsPlayerInView()) {
-
                     if (CurrentState != DistancingState) ChangeState(DistancingState);
                 }
                 else {
-
                     if (CurrentState != SearchingState) ChangeState(SearchingState);
                 }
             }
         }
-        else {
-            base.BulletHit(bullet);
-        }
+        else base.BulletHit(bullet);
     }
 
     public class TankIdleState: BaseState<TankController> {
@@ -193,26 +171,19 @@ public class TankController: BaseAIController<TankController> {
         public override void Enter() {
             controller.agent.speed = controller.moveSpeed;
             controller.agent.isStopped = true;
-            if (controller.PickNewPatrolPoint()) {
-                controller.SetAgentDestination(controller.currentPatrolTarget);
-            }
+            if (controller.PickNewPatrolPoint()) controller.SetAgentDestination(controller.currentPatrolTarget);
         }
 
         public override void Execute() {
 
             if (controller.IsPlayerInView()) {
-
                 controller.ChangeState(controller.DistancingState);
                 return;
             }
 
             if (!controller.hasPatrolTarget || controller.ReachedDestination(controller.patrolPointReachThreshold)) {
-                if (controller.PickNewPatrolPoint()) {
-                    controller.SetAgentDestination(controller.currentPatrolTarget);
-                }
-                else {
-                    controller.StopMovement();
-                }
+                if (controller.PickNewPatrolPoint()) controller.SetAgentDestination(controller.currentPatrolTarget);
+                else controller.StopMovement();
             }
         }
 
@@ -228,7 +199,6 @@ public class TankController: BaseAIController<TankController> {
         public TankDistancingState(TankController ctrl) : base(ctrl) { }
 
         public override void Enter() {
-            Debug.Log($"[{controller.gameObject.name}] Entering Distancing State.");
             controller.agent.speed = controller.moveSpeed;
             recalculateTimer = 0f;
 
@@ -256,31 +226,18 @@ public class TankController: BaseAIController<TankController> {
                 const float buffer = 0.5f;
 
                 if (currentDistance < desiredDist - buffer) {
-
                     Vector3 retreatPoint = controller.CalculateRetreatPoint();
 
                     if (Vector3.Distance(retreatPoint, controller.transform.position) > controller.agent.stoppingDistance) {
-                        Debug.Log($"[{controller.gameObject.name}] Distancing: Player too close ({currentDistance} < {desiredDist - buffer}). Moving to retreat point: {retreatPoint}");
                         controller.SetAgentDestination(retreatPoint);
-
                     }
-                    else {
-
-                        Debug.Log($"[{controller.gameObject.name}] Distancing: Retreat point too close or invalid. Stopping.");
-                        controller.StopMovement();
-                    }
-                }
-                else {
-
-                    Debug.Log($"[{controller.gameObject.name}] Distancing: Player in range ({currentDistance} >= {desiredDist - buffer}). Stopping movement.");
-                    controller.StopMovement();
-                }
+                    else controller.StopMovement();
+                } else controller.StopMovement();
             }
 
         }
 
         public override void Exit() {
-            Debug.Log($"[{controller.gameObject.name}] Exiting Distancing State.");
             controller.StopMovement();
 
         }
@@ -292,24 +249,13 @@ public class TankController: BaseAIController<TankController> {
         public override void Enter() {
             controller.StopShooting();
             controller.agent.speed = controller.moveSpeed;
-            if (controller.playerLastKnownPosition != Vector3.zero) {
-                controller.SetAgentDestination(controller.playerLastKnownPosition);
-            }
-            else {
-                controller.ChangeState(controller.IdleState);
-            }
+            if (controller.playerLastKnownPosition != Vector3.zero) controller.SetAgentDestination(controller.playerLastKnownPosition);
+            else controller.ChangeState(controller.IdleState);
         }
 
         public override void Execute() {
-            if (controller.IsPlayerInView()) {
-
-                controller.ChangeState(controller.DistancingState);
-            }
-            else if (controller.ReachedDestination(controller.agent.stoppingDistance)) {
-
-                controller.ChangeState(controller.IdleState);
-            }
-
+            if (controller.IsPlayerInView()) controller.ChangeState(controller.DistancingState);
+            else if (controller.ReachedDestination(controller.agent.stoppingDistance)) controller.ChangeState(controller.IdleState);
         }
 
         public override void Exit() {
