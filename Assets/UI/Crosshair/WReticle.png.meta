@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f392fa48da4c3044c81f21661519ab09
+guid: 7e186204c67f4d049920892802a5cd02
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,211 +110,190 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: crosshairsheet_0
+      name: spritesheet (1)_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 100
-        height: 100
+        width: 200.77777
+        height: 201
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 925dcce606a68b447b7b0764ba540026
-      internalID: -626099419
+      spriteID: 5a9d7afb886d775438ec22b1b359c402
+      internalID: 1533217381
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: crosshairsheet_1
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 0
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7d9df1da091ad9045927c9eafe5e1d63
-      internalID: 1246967885
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: crosshairsheet_2
+      name: spritesheet (1)_1
       rect:
         serializedVersion: 2
         x: 200
         y: 0
-        width: 100
-        height: 100
+        width: 200.77777
+        height: 201
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7f907b5c3348ee4d9127d91f04edee1
-      internalID: -698138499
+      spriteID: 16f4168e6a8ae164593172c712b1a6b5
+      internalID: 106349747
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: crosshairsheet_3
-      rect:
-        serializedVersion: 2
-        x: 300
-        y: 0
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dee6709117b14df44ad0c6755f5f4f23
-      internalID: 2035587577
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: crosshairsheet_4
+      name: spritesheet (1)_2
       rect:
         serializedVersion: 2
         x: 400
         y: 0
-        width: 100
-        height: 100
+        width: 200.77777
+        height: 201
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 009fade0369fa4e4e984002a8a4be79a
-      internalID: 1715960685
+      spriteID: bbe8b926f7306644b9fc8b0463a37a6c
+      internalID: -1226993431
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: crosshairsheet_5
-      rect:
-        serializedVersion: 2
-        x: 500
-        y: 0
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b24506fa96669e74a9c00231e94cbec7
-      internalID: 254655514
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: crosshairsheet_6
+      name: spritesheet (1)_3
       rect:
         serializedVersion: 2
         x: 600
         y: 0
-        width: 100
-        height: 100
+        width: 200.77777
+        height: 201
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b4567e0c7496ead43a9b76dfdce1259f
-      internalID: -1984874238
+      spriteID: df277fad6f3b3c34d87e1db5c8286ee3
+      internalID: 1945359002
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: crosshairsheet_7
-      rect:
-        serializedVersion: 2
-        x: 700
-        y: 0
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f457d7aa002f9424c9c19ba769a4b216
-      internalID: 1454536553
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: crosshairsheet_8
+      name: spritesheet (1)_4
       rect:
         serializedVersion: 2
         x: 800
         y: 0
-        width: 100
-        height: 100
+        width: 200.77777
+        height: 201
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4112265a74cd5834682c72ca4a25097c
-      internalID: 1164334537
+      spriteID: f0ab2fcd1245e9a4297ede2fb74a4955
+      internalID: 1492043827
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: crosshairsheet_9
+      name: spritesheet (1)_5
       rect:
         serializedVersion: 2
-        x: 900
+        x: 1000
         y: 0
-        width: 100
-        height: 100
+        width: 200.77777
+        height: 201
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a862f1dbc7ac6bf4fb25b5e37e2e27a1
-      internalID: -1236918942
+      spriteID: 3814649de49cd9c42838bbfaae02bcdd
+      internalID: 575418881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet (1)_6
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 0
+        width: 200.77777
+        height: 201
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d7aeb1c37d3bb644a356040fd8619a2
+      internalID: -2108065000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet (1)_7
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 0
+        width: 200.77777
+        height: 201
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dd4a85917c0f184db22e7c30f4ed570
+      internalID: 744451436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet (1)_8
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 0
+        width: 200.77777
+        height: 201
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 433fc23382f0b62468aeb35c3233d45c
+      internalID: -1039544591
       vertices: []
       indices: 
       edges: []
@@ -322,7 +301,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: ccfa83d89d8d72341b06653312aceefc
     internalID: 0
     vertices: []
     indices: 
@@ -330,16 +309,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      crosshairsheet_0: -626099419
-      crosshairsheet_1: 1246967885
-      crosshairsheet_2: -698138499
-      crosshairsheet_3: 2035587577
-      crosshairsheet_4: 1715960685
-      crosshairsheet_5: 254655514
-      crosshairsheet_6: -1984874238
-      crosshairsheet_7: 1454536553
-      crosshairsheet_8: 1164334537
-      crosshairsheet_9: -1236918942
+      spritesheet (1)_0: 1533217381
+      spritesheet (1)_1: 106349747
+      spritesheet (1)_2: -1226993431
+      spritesheet (1)_3: 1945359002
+      spritesheet (1)_4: 1492043827
+      spritesheet (1)_5: 575418881
+      spritesheet (1)_6: -2108065000
+      spritesheet (1)_7: 744451436
+      spritesheet (1)_8: -1039544591
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

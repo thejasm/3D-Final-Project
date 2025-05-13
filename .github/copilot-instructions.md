@@ -2,7 +2,7 @@
 - Project name: 3D-Final-Project
 - Unity version: Unity 2022.3.40f1
 - Active game object:
-  - Name: Tank
-  - Tag: Enemy
-  - Layer: Default
+  - Name: Reticle
+  - Tag: Untagged
+  - Layer: UI
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
