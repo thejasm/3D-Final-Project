@@ -46,4 +46,7 @@
 - [ ] Main Menu
 - [ ] Pause Menu
 - [ ] UI
+	- [x] Reticle
+	- [ ] HP
+	- [ ] Enemy HP
 - [ ] Level Design

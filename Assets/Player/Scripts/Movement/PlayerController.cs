@@ -18,8 +18,8 @@ public class PlayerController: MonoBehaviour {
 
     [Header("Camera Controller")]
     [SerializeField] public CinemachineVirtualCamera[] plyrCam;
-    public Animator crosshair;
-    private int camNo = 0;
+    [HideInInspector]
+    public CinemachineVirtualCamera zoomCam;
 
     [Header("Ground Check")]
     public float groundCheckDist = 0.6f;
@@ -44,16 +44,8 @@ public class PlayerController: MonoBehaviour {
     void Awake() {
         rb = GetComponent<Rigidbody>();
         sphereCollider = GetComponent<SphereCollider>();
-
-        if (plyrCam[camNo] != null) {
-            camPOV = plyrCam[camNo].GetCinemachineComponent<CinemachinePOV>();
-            if (camPOV == null) {
-                Debug.LogError("Cinemachine POV component not found on the Virtual Camera!", plyrCam[camNo]);
-            }
-        }
-        else {
-            Debug.LogError("Player Camera (plyrCam) reference is not set in the inspector!", this);
-        }
+        camPOV = plyrCam[0].GetCinemachineComponent<CinemachinePOV>();
+        zoomCam = plyrCam[1];
     }
 
 
@@ -64,31 +56,27 @@ public class PlayerController: MonoBehaviour {
 
         // --- Jumping ---
         if (Input.GetButtonDown("Jump")) {
-            if (GroundCheck) {
-                qJump = true;
-            }
+            if (GroundCheck) qJump = true;
         }
 
-        // --- Zoom Camera and Crosshair Contril ---
+        // --- Zoom Camera ---
         if (Input.GetMouseButtonDown(1)) {
-            camNo = 1;
-            plyrCam[1].Priority = 2;
-            camPOV = plyrCam[camNo].GetCinemachineComponent<CinemachinePOV>();
-            crosshair.SetBool("zoom", true);
-            //Debug.Log("zoom");
-        } else if (Input.GetMouseButtonUp(1)) {
-            camNo = 0;
-            plyrCam[1].Priority = 0;
-            camPOV = plyrCam[camNo].GetCinemachineComponent<CinemachinePOV>();
-            crosshair.SetBool("zoom", false);
+            zoomCam.Priority = 2;
+            camPOV = zoomCam.GetCinemachineComponent<CinemachinePOV>();
+        }
+        else if (Input.GetMouseButtonUp(1)) {
+            zoomCam.Priority = 0;
+            camPOV = plyrCam[0].GetCinemachineComponent<CinemachinePOV>();
         }
     }
 
-    void FixedUpdate() {
+
+
+        void FixedUpdate() {
         PerformGroundCheck();
 
         // --- Movement ---
-        if (camPOV != null && plyrCam[camNo] != null) {
+        if (camPOV != null && zoomCam != null) {
             float horizontalRotationAngle = camPOV.m_HorizontalAxis.Value;
 
             Quaternion cameraRotation = Quaternion.Euler(0, horizontalRotationAngle, 0);

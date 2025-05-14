@@ -11,15 +11,18 @@ public class GunPlayerController: MonoBehaviour
     public GameObject[] guns;
     public GameObject gunAnim;
     public float gunAnimDuration = 0.5f;
-    private int gunIndex = 0;
+    public int gunIndex = 0;
     // 0 = Machine Gun, 1 = Wraith, 2 = Gauss
     private bool ready = true;
     private Coroutine switchCoroutine;
 
     public Camera cam;
+    public Animator reticle;
+    private PlayerController playerController;
     RaycastHit hit;
     Ray ray;
     void Start() {
+        playerController = GetComponent<PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
         for (int i = 0; i < guns.Length; i++) guns[i].SetActive(i == gunIndex);
         if (gunAnim != null) gunAnim.SetActive(false);
@@ -32,13 +35,14 @@ public class GunPlayerController: MonoBehaviour
                 guns[gunIndex].transform.LookAt(hit.point);
                 guns[gunIndex].transform.rotation *= Quaternion.Euler(-10, 0, 0);
                 gunAnim.transform.LookAt(hit.point);
-            } else {
+            }
+            else {
                 guns[gunIndex].transform.LookAt(hit.point);
                 gunAnim.transform.LookAt(hit.point);
             }
 
-                //gun.transform.position = new Vector3(2.4f, 0f, 2f);
-            }
+            //gun.transform.position = new Vector3(2.4f, 0f, 2f);
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
             if (gunIndex != 0 && ready) SwitchGun(0);
@@ -53,9 +57,16 @@ public class GunPlayerController: MonoBehaviour
         if (gunIndex == 1) {
             if (Input.GetMouseButtonDown(0)) guns[gunIndex].GetComponent<WraithGunController>().ChargeUp();
             if (Input.GetMouseButtonUp(0)) guns[gunIndex].GetComponent<WraithGunController>().Fire();
-        } else if (gunIndex == 2) {
+        }
+        else if (gunIndex == 2) {
             if (Input.GetMouseButtonDown(0)) guns[gunIndex].GetComponent<GaussGunController>().ChargeUp();
             if (Input.GetMouseButtonUp(0)) guns[gunIndex].GetComponent<GaussGunController>().Fire();
+        }
+
+        if (Input.GetMouseButtonDown(1)) {
+            reticle.SetBool("zoom", true);
+        } else if (Input.GetMouseButtonUp(1)) {
+            reticle.SetBool("zoom", false);
         }
     }
 
@@ -87,6 +98,12 @@ public class GunPlayerController: MonoBehaviour
 
     void SwitchGun(int i) {
         if(switchCoroutine != null) StopCoroutine(switchCoroutine);
+
+        reticle.SetInteger("gun", i);
+        reticle.speed = 10f;
+
+        playerController.zoomCam.Priority = 0;
+        playerController.zoomCam = playerController.plyrCam[i + 1];
 
         int prevGunIndex = gunIndex;
 
@@ -149,6 +166,7 @@ public class GunPlayerController: MonoBehaviour
 
         guns[gunIndex].SetActive(true);
         gunAnim.SetActive(false);
+        reticle.speed = 1f;
         ready = true;
     }
 
