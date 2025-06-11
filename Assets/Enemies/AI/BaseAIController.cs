@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.ProBuilder;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIController<T> {
     public BaseState<T> CurrentState { get; private set; }
@@ -13,7 +12,9 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
     [SerializeField] private string currentStateName;
 
     public GameObject playerTarget;
+    private float maxHealth;
     public float health = 100f;
+    public Image healthBar;
     public GameObject deathExplosion;
     public LayerMask visionObstructionLayer;
     public float range = 20f;
@@ -36,7 +37,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         }
         return false;
     }
-    public bool IsPlayerInView(){
+    public virtual bool IsPlayerInView(){
         if (playerTarget == null) return false;
 
         Vector3 positionToCheckFrom = transform.position;
@@ -92,6 +93,13 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
     public void TakeDamage(float amount){
         health -= amount;
+        UpdateHealthBar();
+    }
+
+    public void UpdateHealthBar() {
+        if (healthBar != null) {
+            healthBar.fillAmount = (float)((health / maxHealth) * 0.5);
+        }
     }
 
     public virtual void Die(){
@@ -103,6 +111,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
     // STATE MACHINE METHODS -------------------------------------------------------------------------------------
     protected virtual void Awake() {
         playerTarget = GameObject.FindGameObjectWithTag("Player");
+        maxHealth = health;
     }
 
     protected virtual void Start() {
@@ -128,7 +137,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         }
         CurrentState = startingState;
         CurrentState.Enter();
-        Debug.Log($"[{gameObject.name}]: {startingState.GetType().Name}");
+        //Debug.Log($"[{gameObject.name}]: {startingState.GetType().Name}");
     }
 
     public void ChangeState(BaseState<T> newState) {
@@ -138,12 +147,12 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
         }
 
         if (CurrentState == newState) {
-            Debug.LogWarning($"[{gameObject.name}] Attempted to change to the same state: {newState.GetType().Name}", this);
+            //Debug.LogWarning($"[{gameObject.name}] Attempted to change to the same state: {newState.GetType().Name}", this);
             return;
         }
 
         CurrentState?.Exit();
-        Debug.Log($"[{gameObject.name}] Changing state from {CurrentState?.GetType().Name ?? "None"} to {newState.GetType().Name}");
+        //Debug.Log($"[{gameObject.name}] Changing state from {CurrentState?.GetType().Name ?? "None"} to {newState.GetType().Name}");
 
         CurrentState = newState;
         CurrentState.Enter();
@@ -153,7 +162,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
 
     // DEBUG GIZMOS ---------------------------------------------------------------------------------------------
-    private void OnDrawGizmos() {
+    protected virtual void OnDrawGizmos() {
         Handles.color = Color.yellow;
         Handles.DrawWireDisc(this.transform.position, Vector3.up, range);
 
