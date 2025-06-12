@@ -180,4 +180,3 @@ public class TurretController: BaseAIController<TurretController> {
         Gizmos.DrawSphere(playerLastKnownPosition, 1f);
     }
 }
-}

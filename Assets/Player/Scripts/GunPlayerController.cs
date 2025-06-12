@@ -10,6 +10,7 @@ public class GunPlayerController: MonoBehaviour
     [SerializeField]
     public GameObject[] guns;
     public GameObject gunAnim;
+    public GameObject healthbarUI;
     public float gunAnimDuration = 0.5f;
     public int gunIndex = 0;
     // 0 = Machine Gun, 1 = Wraith, 2 = Gauss
@@ -108,6 +109,7 @@ public class GunPlayerController: MonoBehaviour
         int prevGunIndex = gunIndex;
 
         gunAnim.SetActive(true);
+        healthbarUI.transform.SetParent(gunAnim.transform, true);
         SetAnimFloatsForIndex(prevGunIndex, gunAnim.GetComponent<Animator>());
         guns[prevGunIndex].SetActive(false);
         ready = false;
@@ -165,9 +167,11 @@ public class GunPlayerController: MonoBehaviour
         anim.SetFloat("Blend1", targetBlend1);
 
         guns[gunIndex].SetActive(true);
+        healthbarUI.transform.SetParent(guns[gunIndex].transform, true);
         gunAnim.SetActive(false);
         reticle.speed = 1f;
         ready = true;
     }
 
 }
+

@@ -87,7 +87,7 @@ public abstract class BaseAIController<T>: MonoBehaviour where T : BaseAIControl
 
     public virtual void BulletHit(GameObject bullet) {
         SFX_SimpleProjectile projectile = bullet.GetComponent<SFX_SimpleProjectile>();
-        if (health >= 0) health -= projectile.damage;
+        if (health >= 0) TakeDamage(projectile.damage);
         else Die();
     }
 

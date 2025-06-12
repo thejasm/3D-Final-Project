@@ -58,7 +58,7 @@ namespace QFX.SFX
                         hitObject = hit.collider.gameObject;
 
                         if (hit.rigidbody != null) hit.rigidbody.AddForceAtPosition(_transform.forward * force, hit.point, ForceMode.Impulse);
-                        if (hitObject.CompareTag("Enemy")) {
+                        if (hitObject.CompareTag("Enemy") || hitObject.CompareTag("Player")) {
                             hitObject.SendMessage("BulletHit", this.gameObject, SendMessageOptions.DontRequireReceiver);
                         }
                     }

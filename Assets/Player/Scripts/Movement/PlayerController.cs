@@ -4,7 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
-
+using QFX.SFX;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using System.Drawing;
+using Color = UnityEngine.Color;
+using UnityEngine.VFX;
 
 
 #if UNITY_EDITOR
@@ -15,11 +20,19 @@ public class PlayerController: MonoBehaviour {
     [Header("Movement")]
     public float speed = 20f;
     public float jumpHeight = 8f;
+    public float health = 100f;
+    private float maxHealth;
+    public Image healthBar;
+    public GameObject deathExplosion;
+    public VolumeProfile volumeProfile; 
+    public VisualEffect speedlines;
 
     [Header("Camera Controller")]
     [SerializeField] public CinemachineVirtualCamera[] plyrCam;
     [HideInInspector]
     public CinemachineVirtualCamera zoomCam;
+    private LensDistortion lensDistortion = null;
+
 
     [Header("Ground Check")]
     public float groundCheckDist = 0.6f;
@@ -46,9 +59,10 @@ public class PlayerController: MonoBehaviour {
         sphereCollider = GetComponent<SphereCollider>();
         camPOV = plyrCam[0].GetCinemachineComponent<CinemachinePOV>();
         zoomCam = plyrCam[1];
+        maxHealth = health;
+
+        lensDistortion = volumeProfile.TryGet<LensDistortion>(out var distortion) ? distortion : null;
     }
-
-
 
     void Update() {
         moveInput.x = Input.GetAxis("Horizontal");
@@ -68,6 +82,11 @@ public class PlayerController: MonoBehaviour {
             zoomCam.Priority = 0;
             camPOV = plyrCam[0].GetCinemachineComponent<CinemachinePOV>();
         }
+
+        // --- Speed FX ---
+        float speedFactor = Mathf.Clamp01(rb.velocity.magnitude / 50f);
+        if (lensDistortion != null) lensDistortion.intensity.value = Mathf.Lerp(0.0f, -0.3f, speedFactor);
+        speedlines.SetFloat("radius", Mathf.Lerp(5.0f, 2.9f, speedFactor));
     }
 
 
@@ -106,6 +125,28 @@ public class PlayerController: MonoBehaviour {
             groundLayer,
             QueryTriggerInteraction.Ignore
         );
+    }
+
+    public virtual void BulletHit(GameObject bullet) {
+        SFX_SimpleProjectile projectile = bullet.GetComponent<SFX_SimpleProjectile>();
+        if (health >= 0) TakeDamage(projectile.damage);
+        else Die();
+    }
+
+    public void TakeDamage(float amount) {
+        health -= amount;
+        UpdateHealthBar();
+    }
+
+    public void UpdateHealthBar() {
+        if (healthBar != null) {
+            healthBar.fillAmount = (float)((health / maxHealth) * 0.5);
+        }
+    }
+
+    public virtual void Die() {
+        Instantiate(deathExplosion, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 
 

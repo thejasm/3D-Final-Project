@@ -12,6 +12,7 @@ public class GaussGunController : MonoBehaviour
     public GameObject Projectile;
     public float shotSpeed = 500f;
     public float shotDamage = 20f;
+    public float chargeUpSpeed = 1f;
     private Transform shotOrigin;
 
     public bool ReadyToFire = false;
@@ -27,6 +28,7 @@ public class GaussGunController : MonoBehaviour
     public void ChargeUp() {
         ReadyToFire = false;
         gunAnimator.SetTrigger("ChargeUp");
+        gunAnimator.speed = 1f / chargeUpSpeed;
     }
 
     public void Fire() {
