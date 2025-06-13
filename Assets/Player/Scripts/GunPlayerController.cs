@@ -39,14 +39,27 @@ public class GunPlayerController: MonoBehaviour
     void Update() {
         ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit)) {
-            if (gunIndex == 1) {
-                guns[gunIndex].transform.LookAt(hit.point);
-                guns[gunIndex].transform.rotation *= Quaternion.Euler(-10, 0, 0);
-                gunAnim.transform.LookAt(hit.point);
-            }
-            else {
-                guns[gunIndex].transform.LookAt(hit.point);
-                gunAnim.transform.LookAt(hit.point);
+            float dist = Vector3.Distance(transform.position, hit.point);
+            if (dist < 3f) {
+                Vector3 fwd = transform.position + cam.transform.forward * 10f;
+                if (gunIndex == 1) {
+                    guns[gunIndex].transform.LookAt(fwd);
+                    guns[gunIndex].transform.rotation *= Quaternion.Euler(-10, 0, 0);
+                    gunAnim.transform.LookAt(fwd);
+                }
+                else {
+                    guns[gunIndex].transform.LookAt(fwd);
+                    gunAnim.transform.LookAt(fwd);
+                }
+            } else {
+                if (gunIndex == 1) {
+                    guns[gunIndex].transform.LookAt(hit.point);
+                    guns[gunIndex].transform.rotation *= Quaternion.Euler(-10, 0, 0);
+                    gunAnim.transform.LookAt(hit.point);
+                } else {
+                    guns[gunIndex].transform.LookAt(hit.point);
+                    gunAnim.transform.LookAt(hit.point);
+                }
             }
 
             //gun.transform.position = new Vector3(2.4f, 0f, 2f);
