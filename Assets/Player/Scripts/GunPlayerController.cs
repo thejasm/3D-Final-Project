@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +23,12 @@ public class GunPlayerController: MonoBehaviour
     private PlayerController playerController;
     RaycastHit hit;
     Ray ray;
+
+    public MMFeedbacks MGFeedback;
+    public MMFeedbacks WFeedback;
+    public MMFeedbacks GFeedback;
+
+
     void Start() {
         playerController = GetComponent<PlayerController>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -53,6 +60,11 @@ public class GunPlayerController: MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha3)) {
             if (gunIndex != 2 && ready) SwitchGun(2);
+        }
+
+        if(gunIndex == 0) {
+            if (Input.GetMouseButtonDown(0)) MGFeedback?.PlayFeedbacks();
+            if (Input.GetMouseButtonUp(0)) MGFeedback?.StopFeedbacks();
         }
 
         if (gunIndex == 1) {

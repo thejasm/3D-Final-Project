@@ -10,6 +10,7 @@ using UnityEngine.Rendering.Universal;
 using System.Drawing;
 using Color = UnityEngine.Color;
 using UnityEngine.VFX;
+using MoreMountains.Feedbacks;
 
 
 #if UNITY_EDITOR
@@ -22,16 +23,20 @@ public class PlayerController: MonoBehaviour {
     public float jumpHeight = 8f;
     public float health = 100f;
     private float maxHealth;
-    public Image healthBar;
-    public GameObject deathExplosion;
-    public VolumeProfile volumeProfile; 
-    public VisualEffect speedlines;
 
     [Header("Camera Controller")]
     [SerializeField] public CinemachineVirtualCamera[] plyrCam;
     [HideInInspector]
     public CinemachineVirtualCamera zoomCam;
     private LensDistortion lensDistortion = null;
+
+    [Header("Game Objects")]
+    public Image healthBar;
+    public GameObject deathExplosion;
+    public VolumeProfile volumeProfile;
+    public VisualEffect speedlines;
+    public MMFeedbacks jumpFeedback;
+    public MMFeedbacks landFeedback;
 
 
     [Header("Ground Check")]
@@ -109,6 +114,7 @@ public class PlayerController: MonoBehaviour {
         // --- Jumping ---
         if (qJump) {
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            jumpFeedback?.PlayFeedbacks();
             qJump = false;
         }
     }
@@ -125,6 +131,10 @@ public class PlayerController: MonoBehaviour {
             groundLayer,
             QueryTriggerInteraction.Ignore
         );
+
+        if (GroundCheck && rb.velocity.y < -7f) {
+            landFeedback?.PlayFeedbacks();
+        }
     }
 
     public virtual void BulletHit(GameObject bullet) {
