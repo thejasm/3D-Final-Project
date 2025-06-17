@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RunAtStart: 1
   Delay: 0
-  force: 50
+  force: 100
   IsSingleCollisionMode: 1
   CollisionDistance: 10
   TargetPosition: {x: 0, y: 0, z: 0}
@@ -69,8 +69,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RunAtStart: 1
   Delay: 0
-  Speed: 500
-  damage: 40
+  Speed: 1000
+  damage: 20
   DestroyAfterCollision: 1
   DestroyAfterCollisionTimeout: 1
   CreationPosition: {x: 0, y: 0, z: 0}

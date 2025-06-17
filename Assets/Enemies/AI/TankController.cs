@@ -167,11 +167,15 @@ public class TankController: BaseAIController<TankController> {
 
     public class TankIdleState: BaseState<TankController> {
         public TankIdleState(TankController ctrl) : base(ctrl) { }
+        private Vector3 lastPosition;
+        private float stuckTimer;
 
         public override void Enter() {
             controller.agent.speed = controller.moveSpeed;
             controller.agent.isStopped = true;
             if (controller.PickNewPatrolPoint()) controller.SetAgentDestination(controller.currentPatrolTarget);
+            lastPosition = controller.transform.position;
+            stuckTimer = 0f;
         }
 
         public override void Execute() {
@@ -179,6 +183,25 @@ public class TankController: BaseAIController<TankController> {
             if (controller.IsPlayerInView()) {
                 controller.ChangeState(controller.DistancingState);
                 return;
+            }
+
+            if (controller.hasPatrolTarget && !controller.ReachedDestination(controller.patrolPointReachThreshold)) {
+                stuckTimer += Time.deltaTime;
+                float distanceMoved = Vector3.Distance(controller.transform.position, lastPosition);
+
+                if (distanceMoved >= 1f) {
+                    lastPosition = controller.transform.position;
+                    stuckTimer = 0f;
+                } else if (stuckTimer >= 1f) {
+                    if (controller.PickNewPatrolPoint()) controller.SetAgentDestination(controller.currentPatrolTarget);
+                    else controller.StopMovement();
+                    lastPosition = controller.transform.position;
+                    stuckTimer = 0f;
+                    return;
+                }
+            } else {
+                lastPosition = controller.transform.position;
+                stuckTimer = 0f;
             }
 
             if (!controller.hasPatrolTarget || controller.ReachedDestination(controller.patrolPointReachThreshold)) {

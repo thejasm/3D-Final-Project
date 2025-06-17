@@ -24,7 +24,7 @@ public class ImpactShake: MonoBehaviour {
 
         feedback.FeedbacksIntensity *= falloff;
 
-        Debug.Log($"ImpactShake: Player distance {distance}, Curve t {t}, Falloff {falloff}, Intensity {feedback.FeedbacksIntensity}");
+        //Debug.Log($"ImpactShake: Player distance {distance}, Curve t {t}, Falloff {falloff}, Intensity {feedback.FeedbacksIntensity}");
 
         feedback.PlayFeedbacks();
     }
